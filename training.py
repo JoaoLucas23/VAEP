@@ -43,6 +43,8 @@ class TrainXgboostVAEPModel(d6t.tasks.TaskPickle):
             print(f"### Y: {col} ###")
             evaluate(y_train[col], Y_hat[col])
 
+        self.save(models)
+
 
 def evaluate(y, y_hat):
     p = sum(y) / len(y)
