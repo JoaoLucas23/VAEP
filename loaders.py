@@ -33,4 +33,3 @@ class WyscoutToSPADL(d6t.tasks.TaskCSVPandas):
                 teams = pd.concat(teams).drop_duplicates(subset="team_id")
                 players = pd.concat(players)
                 self.save(actions)
-                #self.save({'teams':teams, 'players':players, 'actions':actions})
