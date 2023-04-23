@@ -28,7 +28,7 @@ class WyscoutToSPADL(d6t.tasks.TaskCSVPandas):
                         events = WYL.events(game.game_id)
                         actions[game.game_id] = spadl.wyscout.convert_to_actions(events, game.home_team_id)
 
-                actions = pd.DataFrame(data=actions['Value'])
+                actions = pd.DataFrame(actions)
 
                 teams = pd.concat(teams).drop_duplicates(subset="team_id")
                 players = pd.concat(players)

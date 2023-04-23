@@ -16,8 +16,8 @@ class TrainXgboostVAEPModel(d6t.tasks.TaskPickle):
         reqs = {'labels': {}, 'features': {}}
 
         for competition in self.train_competitions:
-            reqs['labels'][competition] = CreateVAEPLabels(competition=competition)
-            reqs['features'][competition] = CreateVAEPFeatures(competition=competition)
+            reqs['labels'][competition] = CreateVAEPLabels(competition_name=competition)
+            reqs['features'][competition] = CreateVAEPFeatures(competition_name=competition)
 
         return reqs
     

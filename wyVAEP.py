@@ -13,10 +13,13 @@ class wyVAEP(d6t.tasks.TaskCSVPandas):
     persist = ['VAEP', 'nVAEP']
 
     def requires(self):
+        ''' 
         WYL = PublicWyscoutLoader(root=DATA_DIR)
         competitions = WYL.competitions()
         selected_competitions = competitions[competitions.competition_name!=self.competition_name]
         selected_competitions = selected_competitions.competition_name.unique().tolist()
+        '''
+        selected_competitions = ['Spanish first division', 'Italian first division', 'French first division']
         return {
             'VAEPs': ComputeVAEP(competition_name=self.competition_name, train_competitions=selected_competitions),
             'actions': WyscoutToSPADL(competition_name=self.competition_name)

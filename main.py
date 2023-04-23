@@ -2,8 +2,8 @@ import d6tflow as d6t
 
 from wyVAEP import wyVAEP
 
-wy = wyVAEP(competition_name='English first division')
+COMPETITION_NAME = 'English first division'
+
+wy = d6t.Workflow(wyVAEP, params={'competition_name': COMPETITION_NAME})
 wy.run()
 out = wy.outputLoad()
-
-print(out)
