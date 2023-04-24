@@ -26,10 +26,11 @@ class wyVAEP(d6t.tasks.TaskCSVPandas):
         }
 
     def run(self):
-        predictions = self.input()['VAEPs']['predictions'].load()
-        nVAEP = self.input()['VAEPs']['nVAEP'].load()
+        predictions = self.input().load()
+        #nVAEP = self.input()['VAEPs']['nVAEP'].load()
         actions = self.input()['actions'].load()
 
         VAEPactions = pd.concat([actions, predictions], axis=1).reset_index(drop=True)
 
-        self.save({'VAEP': VAEPactions, 'nVAEP': nVAEP})
+        #self.save({'VAEP': VAEPactions, 'nVAEP': nVAEP})
+        self.save(VAEPactions)

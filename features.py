@@ -1,7 +1,7 @@
 import d6tflow as d6t
 import pandas as pd
 from tqdm import tqdm
-import socceraction.vaep.features as ft
+from socceraction.vaep import features as ft
 
 from loaders import WyscoutToSPADL
 
@@ -13,7 +13,8 @@ class CreateVAEPFeatures(d6t.tasks.TaskCSVPandas):
 
     def run(self):
         actions = self.input().load()
-        
+        actions.loc[actions.result_id.isin([2, 3]), ['result_id']] = 0
+        actions.loc[actions.result_name.isin(['offside', 'owngoal']), ['result_name']] = 'fail'
         xfns = [
             ft.actiontype_onehot,
             ft.bodypart_onehot,
@@ -39,4 +40,10 @@ class CreateVAEPFeatures(d6t.tasks.TaskCSVPandas):
             features.append(match_features)
 
         features = pd.concat(features).reset_index(drop=True)
+        bp_other = [c for c in list(features.columns) if 'bodypart' in c and 'foot' not in c]
+        non_success = [c for c in list(features.columns) if 'result' in c and 'success' not in c]
+        non_action = [c for c in list(features.columns) if 'non_action' in c]
+        keeper = [c for c in list(features.columns) if 'keeper' in c and 'save' not in c]
+
+        features = features.drop(bp_other + non_success + non_action + keeper, axis=1)
         self.save(features)

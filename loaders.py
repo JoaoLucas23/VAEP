@@ -18,18 +18,22 @@ class WyscoutToSPADL(d6t.tasks.TaskCSVPandas):
                         for row in selected_competitions.itertuples()
                 ])
 
-                games_verbose = tqdm(list(games.itertuples()), desc="Loading games")
-                teams, players = [], []
-                actions = {}
+                games_verbose = list(games.itertuples())
+                actions = []
                 for game in tqdm(games_verbose, desc="Converting to SPADL ({} games)".format(len(games_verbose)), total=len(games_verbose)):
                 # load data
-                        teams.append(WYL.teams(game.game_id))
-                        players.append(WYL.players(game.game_id))
+                        #teams.append(WYL.teams(game.game_id))
+                        #players.append(WYL.players(game.game_id))
                         events = WYL.events(game.game_id)
-                        actions[game.game_id] = spadl.wyscout.convert_to_actions(events, game.home_team_id)
 
-                actions = pd.DataFrame(actions)
+                        events = events.rename(columns={'id': 'event_id', 'eventId': 'type_id', 'subEventId': 'subtype_id',
+                                                'teamId': 'team_id', 'playerId': 'player_id', 'matchId': 'game_id'})
+                        actions_game = spadl.wyscout.convert_to_actions(events, game.home_team_id)
+                        actions_game = spadl.add_names(actions_game)
+                        actions_game['home_team_id'] = game.home_team_id
+                        actions.append(actions_game)
 
-                teams = pd.concat(teams).drop_duplicates(subset="team_id")
-                players = pd.concat(players)
+                #teams = pd.concat(teams).drop_duplicates(subset="team_id")
+                #players = pd.concat(players)
+                actions = pd.concat(actions).reset_index(drop=True)
                 self.save(actions)

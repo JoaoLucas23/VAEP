@@ -16,14 +16,13 @@ class CreateVAEPLabels(d6t.tasks.TaskCSVPandas):
         
         yfns = [
             lb.scores,
-            lb.concedes,
-            lb.goal_from_shot
+            lb.concedes
         ]
 
         labels = []
         for game in tqdm(actions.game_id.unique(), desc="Creating labels"):
             actions_game = actions[actions.game_id==game].reset_index(drop=True)
-            labels.append(pd.concat([fn(actions_game) for fn in yfns], axis=1))
+            labels.append(pd.concat([fn(actions=actions_game) for fn in yfns], axis=1))
 
         labels = pd.concat(labels).reset_index(drop=True)
         self.save(labels)

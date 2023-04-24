@@ -25,7 +25,7 @@ class TrainXgboostVAEPModel(d6t.tasks.TaskPickle):
         x_train = []
         y_train = []
 
-        for comp in self.training_competitions:
+        for comp in self.train_competitions:
             x_train.append(self.input()['features'][comp].load())
             y_train.append(self.input()['labels'][comp].load())
         x_train = pd.concat(x_train).reset_index(drop=True)
