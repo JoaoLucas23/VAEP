@@ -10,7 +10,7 @@ DATA_DIR = 'H:\Documentos\SaLab\Soccermatics\Wyscout Data'
 class wyVAEP(d6t.tasks.TaskCSVPandas):
     competition_name = d6t.Parameter()
 
-    persist = ['VAEP', 'nVAEP']
+   # persist = ['VAEP', 'nVAEP']
 
     def requires(self):
         ''' 
@@ -20,17 +20,19 @@ class wyVAEP(d6t.tasks.TaskCSVPandas):
         selected_competitions = selected_competitions.competition_name.unique().tolist()
         '''
         selected_competitions = ['Spanish first division', 'Italian first division', 'French first division']
-        return {
+        return ComputeVAEP(competition_name=self.competition_name, train_competitions=selected_competitions),WyscoutToSPADL(competition_name=self.competition_name)
+        '''return {
             'VAEPs': ComputeVAEP(competition_name=self.competition_name, train_competitions=selected_competitions),
             'actions': WyscoutToSPADL(competition_name=self.competition_name)
-        }
+        }'''
 
     def run(self):
-        predictions = self.input().load()
+        predictions = self.input()[0].load()
         #nVAEP = self.input()['VAEPs']['nVAEP'].load()
-        actions = self.input()['actions'].load()
+        actions = self.input()[1].load()
 
         VAEPactions = pd.concat([actions, predictions], axis=1).reset_index(drop=True)
+        VAEPactions = VAEPactions.sort_values(by=['game_id','period_id','time_seconds'])
 
         #self.save({'VAEP': VAEPactions, 'nVAEP': nVAEP})
         self.save(VAEPactions)
