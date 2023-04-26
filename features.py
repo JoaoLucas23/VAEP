@@ -7,7 +7,7 @@ from loaders import WyscoutToSPADL
 
 class CreateVAEPFeatures(d6t.tasks.TaskCSVPandas):
     competition_name = d6t.Parameter()
-    num_prev_actions = d6t.Parameter()
+    num_prev_actions = d6t.IntParameter()
 
     def requires(self):
         return WyscoutToSPADL(competition_name=self.competition_name)

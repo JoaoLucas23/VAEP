@@ -11,14 +11,14 @@ from labels import CreateVAEPLabels
 
 class TrainXgboostVAEPModel(d6t.tasks.TaskPickle):
     train_competitions = d6t.ListParameter()
-    num_prev_actions = d6t.Parameter()
+    num_prev_actions = d6t.IntParameter()
 
     def requires(self):
         reqs = {'labels': {}, 'features': {}}
 
         for competition in self.train_competitions:
-            reqs['labels'][competition] = CreateVAEPLabels(competition_name=competition,num_prev_actions=self.num_prev_actions)
-            reqs['features'][competition] = CreateVAEPFeatures(competition_name=competition)
+            reqs['labels'][competition] = CreateVAEPLabels(competition_name=competition, num_prev_actions=self.num_prev_actions)
+            reqs['features'][competition] = CreateVAEPFeatures(competition_name=competition, num_prev_actions=self.num_prev_actions)
 
         return reqs
     

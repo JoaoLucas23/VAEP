@@ -7,9 +7,16 @@ from computeVAEP import ComputeVAEP
 COMPETITION_NAME = 'English first division'
 TRAIN_COMPETITIONS = ['Spanish first division', 'Italian first division', 'French first division']
 
-wy = d6t.Workflow(wyVAEP, params={'competition_name': COMPETITION_NAME, 'num_prev_actions': 3})
-wy.run()
-VAEP3actions = wy.outputLoad()
+wy3 = d6t.Workflow(wyVAEP, params={'competition_name': COMPETITION_NAME, 'num_prev_actions': 3})
+wy3.run()
+VAEP3actions = wy3.outputLoad()
+wy5 = d6t.Workflow(wyVAEP, params={'competition_name': COMPETITION_NAME, 'num_prev_actions': 5})
+wy5.run()
+VAEP5actions = wy5.outputLoad()
+wy10 = d6t.Workflow(wyVAEP, params={'competition_name': COMPETITION_NAME, 'num_prev_actions': 10})
+wy10.run()
+VAEP10actions = wy10.outputLoad()
+
 
 '''
 minutes = pd.read_json("H:\Documentos\SaLab\Soccermatics\Wyscout Data\minutes_played_per_game_England.json",encoding='raw_unicode_escape')
