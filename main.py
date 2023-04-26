@@ -18,6 +18,7 @@ wy10.run()
 VAEP10actions = wy10.outputLoad()
 
 
+
 '''
 minutes = pd.read_json("H:\Documentos\SaLab\Soccermatics\Wyscout Data\minutes_played_per_game_England.json",encoding='raw_unicode_escape')
 playing_time = minutes.rename(columns={'playerId': 'player_id'})
