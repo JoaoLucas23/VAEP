@@ -7,6 +7,7 @@ from loaders import WyscoutToSPADL
 
 class CreateVAEPFeatures(d6t.tasks.TaskCSVPandas):
     competition_name = d6t.Parameter()
+    num_prev_actions = d6t.Parameter()
 
     def requires(self):
         return WyscoutToSPADL(competition_name=self.competition_name)
@@ -34,7 +35,7 @@ class CreateVAEPFeatures(d6t.tasks.TaskCSVPandas):
         features = []
         for game in tqdm(actions.game_id.unique(), desc="Creating features"):
             actions_game = actions[actions.game_id==game].reset_index(drop=True)
-            match_states = ft.gamestates(actions=actions_game,nb_prev_actions=3)
+            match_states = ft.gamestates(actions=actions_game,nb_prev_actions=self.num_prev_actions)
             match_states = ft.play_left_to_right(match_states,actions_game.home_team_id.unique()[0])
             match_features = pd.concat([fn(match_states) for fn in xfns], axis=1)
             features.append(match_features)

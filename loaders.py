@@ -21,9 +21,8 @@ class WyscoutToSPADL(d6t.tasks.TaskCSVPandas):
                 games_verbose = list(games.itertuples())
                 actions = []
                 for game in tqdm(games_verbose, desc="Converting to SPADL ({} games)".format(len(games_verbose)), total=len(games_verbose)):
-                # load data
-                        #teams.append(WYL.teams(game.game_id))
-                        #players.append(WYL.players(game.game_id))
+                        teams.append(WYL.teams(game.game_id))
+                        players.append(WYL.players(game.game_id))
                         events = WYL.events(game.game_id)
 
                         events = events.rename(columns={'id': 'event_id', 'eventId': 'type_id', 'subEventId': 'subtype_id',
@@ -33,7 +32,8 @@ class WyscoutToSPADL(d6t.tasks.TaskCSVPandas):
                         actions_game['home_team_id'] = game.home_team_id
                         actions.append(actions_game)
 
-                #teams = pd.concat(teams).drop_duplicates(subset="team_id")
-                #players = pd.concat(players)
+                teams = pd.concat(teams).drop_duplicates(subset="team_id")
+                players = pd.concat(players)
                 actions = pd.concat(actions).reset_index(drop=True)
+                actions = actions.merge(teams).merge(players)
                 self.save(actions)

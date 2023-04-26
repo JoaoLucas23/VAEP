@@ -6,33 +6,21 @@ from loaders import WyscoutToSPADL
 from computeVAEP import ComputeVAEP
 
 DATA_DIR = 'H:\Documentos\SaLab\Soccermatics\Wyscout Data'
-
+selected_competitions = ['Spanish first division', 'Italian first division', 'French first division']
 class wyVAEP(d6t.tasks.TaskCSVPandas):
     competition_name = d6t.Parameter()
-
-   # persist = ['VAEP', 'nVAEP']
+    num_prev_actions = d6t.Parameter()
 
     def requires(self):
-        ''' 
-        WYL = PublicWyscoutLoader(root=DATA_DIR)
-        competitions = WYL.competitions()
-        selected_competitions = competitions[competitions.competition_name!=self.competition_name]
-        selected_competitions = selected_competitions.competition_name.unique().tolist()
-        '''
-        selected_competitions = ['Spanish first division', 'Italian first division', 'French first division']
-        return ComputeVAEP(competition_name=self.competition_name, train_competitions=selected_competitions),WyscoutToSPADL(competition_name=self.competition_name)
-        '''return {
-            'VAEPs': ComputeVAEP(competition_name=self.competition_name, train_competitions=selected_competitions),
-            'actions': WyscoutToSPADL(competition_name=self.competition_name)
-        }'''
+        return ComputeVAEP(competition_name=self.competition_name, train_competitions=selected_competitions, num_prev_actions=self.num_prev_actions)
+    #,WyscoutToSPADL(competition_name=self.competition_name)
+
 
     def run(self):
-        predictions = self.input()[0].load()
-        #nVAEP = self.input()['VAEPs']['nVAEP'].load()
-        actions = self.input()[1].load()
+        predictions = self.input().load()
+        #actions = self.input()[1].load()
 
-        VAEPactions = pd.concat([actions, predictions], axis=1).reset_index(drop=True)
-        VAEPactions = VAEPactions.sort_values(by=['game_id','period_id','time_seconds'])
+        #VAEPactions = pd.concat([actions, predictions], axis=1).reset_index(drop=True)
+        #VAEPactions = VAEPactions.sort_values(by=['game_id','period_id','time_seconds'])
 
-        #self.save({'VAEP': VAEPactions, 'nVAEP': nVAEP})
-        self.save(VAEPactions)
+        self.save(predictions)
