@@ -21,7 +21,8 @@ class wyVAEP(d6t.tasks.TaskCSVPandas):
         actions = self.input()[1].load()
         wyData = self.input()[2].load()
 
-        VAEPactions = pd.concat([actions, predictions, wyData], axis=1).reset_index(drop=True)
+        actions = actions.merge(wyData)
+        VAEPactions = pd.concat([actions, predictions], axis=1).reset_index(drop=True)
         VAEPactions = VAEPactions.sort_values(by=['game_id','period_id','time_seconds'])
 
         self.save(VAEPactions)
