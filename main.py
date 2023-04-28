@@ -22,7 +22,9 @@ wy3 = d6t.Workflow(wyVAEP, params={'competition_name': COMPETITION_NAME, 'num_pr
 wy3.run()
 VAEP3actions = wy3.outputLoad()
 
-player_summ_table = groupedVAEP(VAEP3actions, minutes_table, column='player_name')
-getVAEPByPlayer(player_summ_table, 'M. Salah')
+player_summ_table = oneColumnGroupedVAEP(VAEP3actions,column='player_name',by90=True,minutes_table=minutes_table)
+action_summ_table = oneColumnGroupedVAEP(df=VAEP3actions, column='type_name',by90=False)
+result_summ_table = oneColumnGroupedVAEP(df=VAEP3actions, column='result_name',by90=False)
 
-action_summ_table = groupedVAEP(VAEP3actions, minutes_table, column='action_name')
+player_game_table = multipleColumnsGroupedVAEP(df=VAEP3actions,columns=['player_name','game_id'])
+player_action_table = multipleColumnsGroupedVAEP(df=VAEP3actions,columns=['player_name','type_name'])
