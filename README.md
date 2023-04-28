@@ -5,6 +5,14 @@ VAEP is a Python code based on ML-KULeuven's and SALab's VAEP. The project uses 
 
 The project uses data from the Spanish, French, and Italian leagues to train the model and generate VAEP values for the English Premier League. 
 
+## Data Requirements
+To run VAEP, you will need access to soccer match data in the Wyscout format. The project has been developed using Wyscout data from the Spanish, French, Italian, and English leagues, but it is possible to adapt the code to work with data from other leagues. All data files should be on the same directory.
+
+The following data is required:
+- Event data: [events_England.json, events_Spain.json, events_France.json, events_Italy.json].
+- Players data: [players.json, minutes_played_per_game_England.json]
+- Teams data: teams.json
+
 ## Files
 The project contains the following files:
 - `loaders.py`: This file loads the Wyscout data and converts it to the SPADL format.
