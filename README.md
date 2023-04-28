@@ -11,7 +11,7 @@ This is a Python code, based on ML-KULeuven's and SALab's VAEP. I used Wyscout f
 - wyVAEP.py -> join the VAEP values to the complete actions dataframe including players and teams names
 - wyDataLoader.py -> load adittional wyscout data, such as minutes played per game per player
 - functions.py -> some aditional functions to get summarized tables with rating values (VAEP by 90)
-- main.py -< run the code
+- main.py -> run the code
 ## How to run
 On the main.py run the w3 Workflow to get a complete pandas DataFrame with all actions and their values for the entire English 17/18 season.
 Run the other functions to get some summarized tables.
