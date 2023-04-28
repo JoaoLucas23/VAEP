@@ -2,8 +2,11 @@ import d6tflow as d6t
 import pandas as pd
 from features import CreateVAEPFeatures
 from wyVAEP import wyVAEP
+
 from computeVAEP import ComputeVAEP
 from wyDataLoader import wyLoadTimePlayed
+
+from functions import *
 
 DATA_DIR = 'H:\Documentos\SaLab\Soccermatics\Wyscout Data'
 COMPETITION_NAME = 'English first division'
@@ -19,17 +22,7 @@ wy3 = d6t.Workflow(wyVAEP, params={'competition_name': COMPETITION_NAME, 'num_pr
 wy3.run()
 VAEP3actions = wy3.outputLoad()
 
-vaep_table = VAEP3actions.groupby('player_name')['VAEP'].agg(['count','sum']).reset_index(drop=False)
-vaep_table = vaep_table.rename(columns={'sum': 'VAEP'})
-scores_table = VAEP3actions.groupby('player_name')['scores'].sum().reset_index(drop=False)
-scores_table = scores_table.rename(columns={'sum': 'scores'})
-concedes_table = VAEP3actions.groupby('player_name')['concedes'].sum().reset_index(drop=False)
-concedes_table = concedes_table.rename(columns={'sum': 'concedes'})
+player_summ_table = groupedVAEP(VAEP3actions, minutes_table, column='player_name')
+getVAEPByPlayer(player_summ_table, 'M. Salah')
 
-summ_table = vaep_table.merge(scores_table).merge(concedes_table).merge(minutes_table).reset_index(drop=True)
-
-summ_table['rating'] = (summ_table['VAEP']*90) / summ_table['minutes_played']
-summ_table['offensive'] = (summ_table['scores']*90) / summ_table['minutes_played']
-summ_table['defensive'] = (summ_table['concedes']*90) / summ_table['minutes_played']
-summ_table = summ_table.sort_values(by=['rating','offensive','defensive'], ascending=[False,False,True])
-summ_table = summ_table.loc[summ_table.minutes_played>450]
+action_summ_table = groupedVAEP(VAEP3actions, minutes_table, column='action_name')
