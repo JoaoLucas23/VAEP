@@ -13,16 +13,17 @@ class ComputeVAEP(d6t.tasks.TaskCSVPandas):
     num_prev_actions = d6t.IntParameter()
 
     def requires(self):
-        return CreateVAEPFeatures(competition_name=self.competition_name, num_prev_actions=self.num_prev_actions), TrainXgboostVAEPModel(train_competitions=self.train_competitions,num_prev_actions=self.num_prev_actions)
+        return CreateVAEPFeatures(competition_name=self.competition_name, num_prev_actions=self.num_prev_actions), TrainXgboostVAEPModel(train_competitions=self.train_competitions,num_prev_actions=self.num_prev_actions),WyscoutToSPADL(competition_name=self.competition_name)
     
     def run(self):
         features = self.input()[0].load()
         models = self.input()[1].load()
-
+        actions = self.input()[2].load()
         predictions = {}
         for model in tqdm(['scores', 'concedes'], desc="Predicting scores and concedes"):
             predictions[model] = models[model].predict_proba(features)[:,1]
 
         predictions = pd.DataFrame(predictions)
-        predictions['VAEP'] = predictions['scores'] - predictions['concedes']
+        predictions = vaepformula.value(actions, predictions['scores'], predictions['concedes'])
+        #predictions['VAEP'] = predictions['scores'] - predictions['concedes']
         self.save(predictions)

@@ -25,6 +25,7 @@ class WyscoutToSPADL(d6t.tasks.TaskCSVPandas):
                         events = events.rename(columns={'id': 'event_id', 'eventId': 'type_id', 'subEventId': 'subtype_id',
                                                 'teamId': 'team_id', 'playerId': 'player_id', 'matchId': 'game_id'})
                         actions_game = spadl.wyscout.convert_to_actions(events, game.home_team_id)
+                        actions_game = spadl.play_left_to_right(actions=actions_game, home_team_id=game.home_team_id)
                         actions_game = spadl.add_names(actions_game)
                         actions_game['home_team_id'] = game.home_team_id
                         actions.append(actions_game)
