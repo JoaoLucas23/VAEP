@@ -1,6 +1,5 @@
 import d6tflow as d6t
 import pandas as pd
-from features import CreateVAEPFeatures
 from wyVAEP import wyVAEP
 
 from computeVAEP import ComputeVAEP

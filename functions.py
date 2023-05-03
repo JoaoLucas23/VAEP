@@ -17,7 +17,7 @@ def oneColumnGroupedVAEP(df=pd.DataFrame(), column='player_name', by90=True, min
         summ_table['offensive'] = (summ_table['offensive_value']*90) / summ_table['minutes_played']
         summ_table['defensive'] = (summ_table['defensive_value']*90) / summ_table['minutes_played']
         summ_table = summ_table.sort_values(by=['rating','offensive','defensive'], ascending=[False,False,True])
-        summ_table = summ_table.loc[summ_table.minutes_played>450]
+        #summ_table = summ_table.loc[summ_table.minutes_played>450]
     else:
         summ_table = vaep_table.merge(scores_table).merge(concedes_table).reset_index(drop=True)
         summ_table['rating'] = summ_table['vaep_value'] / summ_table['count']
@@ -37,6 +37,6 @@ def multipleColumnsGroupedVAEP(df=pd.DataFrame(), columns=['player_name']):
     summ_table['offensive'] = summ_table['offensive_value'] / summ_table['count']
     summ_table['defensive'] = summ_table['defensive_value'] / summ_table['count']
     summ_table = summ_table.sort_values(by=['rating','offensive','defensive'], ascending=[False,False,True])
-    summ_table = summ_table.loc[summ_table['count']>=10]
+    #summ_table = summ_table.loc[summ_table['count']>=10]
     
     return summ_table
