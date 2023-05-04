@@ -33,8 +33,24 @@ games = pd.concat([
 ])
 
 games_verbose = list(games.itertuples())
+training_games = games_verbose[:190]
+test_games = games_verbose[190:]
+training_actions = []
 actions = []
-for game in tqdm(games_verbose, desc="Converting to SPADL ({} games)".format(len(games_verbose)), total=len(games_verbose)):
+
+for game in tqdm(training_games, desc="Converting training games to SPADL ({} games)".format(len(games_verbose)), total=len(games_verbose)):
+        events = WYL.events(game.game_id)
+        events = events.rename(columns={'id': 'event_id', 'eventId': 'type_id', 'subEventId': 'subtype_id',
+                                'teamId': 'team_id', 'playerId': 'player_id', 'matchId': 'game_id'})
+        actions_game = spadl.wyscout.convert_to_actions(events, game.home_team_id)
+        actions_game = spadl.play_left_to_right(actions=actions_game, home_team_id=game.home_team_id)
+        actions_game = spadl.add_names(actions_game)
+        actions_game['home_team_id'] = game.home_team_id
+        training_actions.append(actions_game)
+
+training_actions = pd.concat(training_actions).reset_index(drop=True)
+
+for game in tqdm(test_games, desc="Converting test games to SPADL ({} games)".format(len(games_verbose)), total=len(games_verbose)):
         events = WYL.events(game.game_id)
         events = events.rename(columns={'id': 'event_id', 'eventId': 'type_id', 'subEventId': 'subtype_id',
                                 'teamId': 'team_id', 'playerId': 'player_id', 'matchId': 'game_id'})
@@ -45,6 +61,12 @@ for game in tqdm(games_verbose, desc="Converting to SPADL ({} games)".format(len
         actions.append(actions_game)
 
 actions = pd.concat(actions).reset_index(drop=True)
+actions = actions.sort_values(by=['game_id','period_id','time_seconds']).reset_index(drop=True)
+
+players = pd.read_json('H:\Documentos\SaLab\Soccermatics\Wyscout Data\players.json')
+players = players.rename(columns={'wyId':'player_id','shortName':'player_name'})
+players = players[['player_id','player_name']]
+actions = actions.merge(players, on='player_id')
 
 def createFeatures(actions):
     actions.loc[actions.result_id.isin([2, 3]), ['result_id']] = 0
@@ -142,24 +164,21 @@ def calculateVaep(actions, training_actions):
     predictions = vaepformula.value(actions, predictions['scores'], predictions['concedes'])
     return predictions
 
-n_treino = int(np.ceil(len(actions) * 0.7))
-n_test = len(actions) - n_treino
-
-training_actions = actions[:n_treino].reset_index(drop=True)
-actions = actions[n_treino:].reset_index(drop=True)
-
 preds = calculateVaep(actions=actions, training_actions=training_actions)
 
 VAEPactions = pd.concat([actions, preds], axis=1).reset_index(drop=True)
 VAEPactions = VAEPactions.sort_values(by=['game_id','period_id','time_seconds'])
 
+gamesIds = actions.game_id.unique().tolist()
+
 pt = d6t.Workflow(wyLoadTimePlayed, params={'data_dir': DATA_DIR})
 pt.run()
 played_time = pt.outputLoad()
-minutes_table = played_time.groupby('player_id')['minutes_played'].sum().reset_index(drop=False)
+played_time = played_time.loc[played_time.game_id.isin(gamesIds)]
+minutes_table = played_time.groupby('player_name')['minutes_played'].sum().reset_index(drop=False)
 minutes_table = minutes_table.rename(columns={'sum': 'minutes_played'})
 
-player_summ_table = oneColumnGroupedVAEP(VAEPactions,column='player_id',by90=True,minutes_table=minutes_table)
+player_summ_table = oneColumnGroupedVAEP(VAEPactions,column='player_name',by90=True,minutes_table=minutes_table)
 action_summ_table = oneColumnGroupedVAEP(df=VAEPactions, column='type_name',by90=False)
 result_summ_table = oneColumnGroupedVAEP(df=VAEPactions, column='result_name',by90=False)
 
