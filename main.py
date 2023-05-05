@@ -1,7 +1,7 @@
 import d6tflow as d6t
 import pandas as pd
-from wyVAEP import wyVAEP
 
+from wyVAEP import wyVAEP
 from computeVAEP import ComputeVAEP
 from wyDataLoader import wyLoadTimePlayed
 

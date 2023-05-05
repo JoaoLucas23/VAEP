@@ -10,6 +10,7 @@ class wyLoadData(d6t.tasks.TaskCSVPandas):
         players = pd.read_json(path_or_buf=self.data_dir+'\players.json')
         teams = pd.read_json(path_or_buf=self.data_dir+'\\teams.json')
         players = players.rename(columns={'wyId': 'player_id', 'shortName': 'player_name', 'currentTeamId': 'team_id'})
+        players['player_name'] = players['player_name'].str.decode('unicode-escape')
         teams = teams.rename(columns={'wyId': 'team_id', 'name': 'team_name'})
         players = players[['player_id', 'player_name', 'team_id']]
         teams = teams[['team_id', 'team_name']]
