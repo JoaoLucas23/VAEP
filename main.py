@@ -26,9 +26,13 @@ sp = d6t.Workflow(wyVAEP, params={'competition_name': SPAIN, 'num_prev_actions':
 sp.run()
 spainVAEP = sp.outputLoad()
 
-player_summ_table = oneColumnGroupedVAEP(englandVAEP,column='player_name',by90=True,minutes_table=minutes_table)
-action_summ_table = oneColumnGroupedVAEP(df=englandVAEP, column='type_name',by90=False)
-result_summ_table = oneColumnGroupedVAEP(df=englandVAEP, column='result_name',by90=False)
+generalVAEP = pd.concat([englandVAEP,spainVAEP]).reset_index(drop=True)
+
+england_player_summ_table = oneColumnGroupedVAEP(englandVAEP,column='player_name',by90=True,minutes_table=minutes_table)
+spain_player_summ_table = oneColumnGroupedVAEP(spainVAEP,column='player_name',by90=True,minutes_table=minutes_table)
+players_summ_table = oneColumnGroupedVAEP(df=generalVAEP, column='player_name',by90=True,minutes_table=minutes_table)
+action_summ_table = oneColumnGroupedVAEP(df=generalVAEP, column='type_name',by90=False)
+result_summ_table = oneColumnGroupedVAEP(df=generalVAEP, column='result_name',by90=False)
 
 player_game_table = multipleColumnsGroupedVAEP(df=englandVAEP,columns=['player_name','game_id'])
 player_action_table = multipleColumnsGroupedVAEP(df=englandVAEP,columns=['player_name','type_name'])

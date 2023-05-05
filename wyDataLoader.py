@@ -23,6 +23,8 @@ class wyLoadTimePlayed(d6t.tasks.TaskCSVPandas):
 
     def run(self):
         minutes_played_england = pd.read_json(path_or_buf=self.data_dir+'\minutes_played_per_game_England.json')
-        minutes_played_england = minutes_played_england.rename(columns={'playerId': 'player_id', 'minutesPlayed':'minutes_played','matchId':'game_id','shortName':'player_name'})
-        minutes_played_england = minutes_played_england[['player_id', 'minutes_played','game_id','player_name']]
-        self.save(minutes_played_england)
+        minutes_played_spain = pd.read_json(path_or_buf=self.data_dir+'\minutes_played_per_game_Spain.json')
+        minutes_played = pd.concat([minutes_played_england,minutes_played_spain])
+        minutes_played = minutes_played.rename(columns={'playerId': 'player_id', 'minutesPlayed':'minutes_played','matchId':'game_id','shortName':'player_name'})
+        minutes_played = minutes_played[['player_id', 'minutes_played','game_id','player_name']]
+        self.save(minutes_played)
