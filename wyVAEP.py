@@ -10,11 +10,10 @@ DATA_DIR = 'H:\Documentos\SaLab\Soccermatics\Wyscout Data'
 
 class wyVAEP(d6t.tasks.TaskCSVPandas):
     competition_name = d6t.Parameter()
-    num_prev_actions = d6t.IntParameter()
     train_competitions = d6t.ListParameter()
     data_dir = DATA_DIR
     def requires(self):
-        return ComputeVAEP(competition_name=self.competition_name, train_competitions=self.train_competitions, num_prev_actions=self.num_prev_actions), WyscoutToSPADL(competition_name=self.competition_name), wyLoadData(data_dir=self.data_dir)
+        return ComputeVAEP(competition_name=self.competition_name, train_competitions=self.train_competitions), WyscoutToSPADL(competition_name=self.competition_name), wyLoadData(data_dir=self.data_dir)
 
 
     def run(self):

@@ -18,11 +18,11 @@ played_time = pt.outputLoad()
 minutes_table = played_time.groupby('player_name')['minutes_played'].sum().reset_index(drop=False)
 minutes_table = minutes_table.rename(columns={'sum': 'minutes_played'})
 
-en = d6t.Workflow(wyVAEP, params={'competition_name': ENGLAND, 'num_prev_actions': 3, 'train_competitions': TRAIN_COMPETITIONS})
+en = d6t.Workflow(wyVAEP, params={'competition_name': ENGLAND, 'train_competitions': TRAIN_COMPETITIONS})
 en.run()
 englandVAEP = en.outputLoad()
 
-sp = d6t.Workflow(wyVAEP, params={'competition_name': SPAIN, 'num_prev_actions': 3, 'train_competitions': TRAIN_COMPETITIONS})
+sp = d6t.Workflow(wyVAEP, params={'competition_name': SPAIN, 'train_competitions': TRAIN_COMPETITIONS})
 sp.run()
 spainVAEP = sp.outputLoad()
 

@@ -5,6 +5,7 @@ import socceraction.vaep.labels as lb
 
 from loaders import WyscoutToSPADL
 
+
 class CreateVAEPLabels(d6t.tasks.TaskCSVPandas):
     competition_name = d6t.Parameter()
 
