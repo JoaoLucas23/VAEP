@@ -5,10 +5,23 @@ This is a VAEP model based on ML-KULeuven's and SALab's VAEP. This model uses Xg
 
 ## Model
 ### Xgboost
-
+The model uses the Xgboost algorithm to predict the value of every SPADL action on a game. The model is trained using the data from the German, French, and Italian leagues. The model is tested using the data from the English and Spanish leagues. Xgbost is used because it is a fast and scalable algorithm that can handle missing values and outliers.
+* Brier Score: 0.0000
+* NBS: 0.0000
+* AUC: 0.0000
+<br><br>
+*obs: NBS = Brier Score / Random Model*
 
 ### Features
-
+* actiontype_onehot
+* bodypart_onehot
+* result_onehot
+* goalscore
+* startlocation
+* endlocation
+* team
+* time
+* time_delta
 
 ## Data
 ###Train Data
