@@ -1,17 +1,21 @@
 # VAEP
 
-## Introduction
-VAEP is a Python code based on ML-KULeuven's and SALab's VAEP. The project uses Wyscout free data to develop the VAEP values for the English Premier League. To manage the process, the d6tflow library is used. 
+## Description
+This is a VAEP model based on ML-KULeuven's and SALab's VAEP. This model uses Xgboost to predict the value of every SPADL action on a game, using Wyscout data to train and test. The project uses data from the German, French, and Italian leagues to train the model and generate VAEP values for the English and Spanish first division. 
 
-The project uses data from the Spanish, French, and Italian leagues to train the model and generate VAEP values for the English Premier League. 
+## Model
+### Xgboost
 
-## Data Requirements
-To run VAEP, you will need access to soccer match data in the Wyscout format. The project has been developed using Wyscout data from the Spanish, French, Italian, and English leagues, but it is possible to adapt the code to work with data from other leagues. All data files should be on the same directory.
 
-The following data is required:
-- Event data: [events_England.json, events_Spain.json, events_France.json, events_Italy.json].
-- Players data: [players.json, minutes_played_per_game_England.json]
-- Teams data: teams.json
+### Features
+
+
+## Data
+###Train Data
+To train the model, all actions in the Italian, French and German League on the 17/18 season were used. This train data resulted in X total acions.
+
+###Test Data
+To test the model, all actions in the English and Spanish League on the 17/18 season were used. This test data resulted in X total actions.
 
 ## Files
 The project contains the following files:
@@ -25,7 +29,13 @@ The project contains the following files:
 - `functions.py`: This file contains additional functions to get summarized tables with rating values (VAEP by 90).
 - `main.py`: This file runs the code.
 
-## How to run
-To generate a complete Pandas DataFrame with all actions and their values for the entire English Premier League 2017/2018 season, run the w3 workflow in `main.py`. 
+## Results
+### Train Data
 
-To get summarized tables, run the other functions. 
+### Test Data
+
+## To Do
+* Test features differences
+* Get features values
+* refactor tqdm loops
+* refactor main.py
