@@ -48,6 +48,7 @@ The project contains the following files:
 ### Test Data
 
 ## To Do
+* action_values = fm.value(actions=spadl, Pscores=predictions['scores'], Pconcedes=predictions['concedes'])
 * Test features differences
 * Get features values
 * refactor tqdm loops
